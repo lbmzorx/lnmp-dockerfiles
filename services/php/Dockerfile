@@ -27,6 +27,9 @@ RUN apt-get update && apt-get install -y \
 COPY ./pkg/redis.tgz /home/redis.tgz
 COPY ./pkg/libmemcached.tar.gz /home/libmemcached.tar.gz
 COPY ./pkg/memcached.tgz /home/memcached.tgz
+COPY ./pkg/scws-1.2.3.tar.bz2 /home/scws-1.2.3.tar.bz2
+COPY ./pkg/scws-dict-chs-gbk.tar.bz2 /home/scws-dict-chs-gbk.tar.bz2
+COPY ./pkg/scws-dict-chs-utf8.tar.bz2 /home/scws-dict-chs-utf8.tar.bz2
 
 # 安装 PECL 拓展，这里我们安装的是Redis
 RUN pecl install /home/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
@@ -54,6 +57,24 @@ RUN cd /home \
     && make \
     && make install \
     && echo "extension=swoole.so" > /usr/local/etc/php/conf.d/swoole.ini
+
+# 安装 scws
+RUN cd /home \
+    && tar xvjf /home/scws-1.2.3.tar.bz2 \
+    && tar xvjf /home/scws-dict-chs-gbk.tar.bz2 \
+    && tar xvjf /home/scws-dict-chs-utf8.tar.bz2 \
+    && cd scws-1.2.3 \
+    && ./configure --prefix=/usr/local/scws \
+    && make \
+    && make install \
+    && cp /home/dict.utf8.xdb /usr/local/scws/etc/dict.utf8.xdb \
+    && cp /home/dict.xdb /usr/local/scws/etc/dict.xdb \
+    && cd /home/scws-1.2.3/phpext \
+    && phpize \
+    && ./configure --with-scws=/usr/local/scws --with-php-config=/usr/local/bin/php-config \
+    && make \
+    && make install \
+    && echo "extension = scws.so \n scws.default.charset = gbk \n scws.default.fpath = /usr/local/scws/etc" > /usr/local/etc/php/conf.d/scws.ini
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer
