@@ -20,7 +20,7 @@
 - redis 4.0.0
 - swoole latest
 - memcached 3.0.4
-
+- scws 1.2.3
 > 注意:标注完全版的，通过切换full分支获得文件才能安装
 
 #### 目录
@@ -66,7 +66,11 @@ cd lnmp-dockerfiles/services
 ```
 wget https://pecl.php.net/get/redis-4.0.0.tgz -O php/pkg/redis.tgz  
 wget https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz -O php/pkg/libmemcached.tar.gz  
-wget https://pecl.php.net/get/memcached-3.0.4.tgz -O php/pkg/memcached.tgz  
+wget https://pecl.php.net/get/memcached-3.0.4.tgz -O php/pkg/memcached.tgz 
+wget http://www.xunsearch.com/scws/down/scws-1.2.3.tar.bz2 -O php/pkg/scws-1.2.3.tar.bz2
+wget http://www.xunsearch.com/scws/down/scws-dict-chs-gbk.tar.bz2 -O php/pkg/scws-dict-chs-gbk.tar.bz2
+wget http://www.xunsearch.com/scws/down/scws-dict-chs-utf8.tar.bz2 -O php/pkg/scws-dict-chs-utf8.tar.bz2
+
 ```
 
 #### 4.docker-compose构建项目
